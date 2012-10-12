@@ -1,0 +1,1 @@
+(ns fp-oo.core)
