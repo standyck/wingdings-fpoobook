@@ -38,7 +38,7 @@
 
 ;;exercise 3
 (defn equal-tri?
-  "Tests"
+  "Tests that triangles are equal. Note doesn't work for triangles with the same points but in a different order, but the exercise doesn't call for that."
   [triangle1 triangle2] (= triangle1 triangle2))
 
 ;;exercise 4
