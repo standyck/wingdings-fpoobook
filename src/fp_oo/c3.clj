@@ -1,4 +1,5 @@
-(ns fp-oo.c3)
+(ns fp-oo.c3
+  (:use [clojure.core :exclude '[class]]))
 
 (def Point
   (fn [x y]
@@ -34,7 +35,6 @@
   (fn [p1 p2 p3]
     {:p1 p1, :p2 p2 :p3 p3, :__class_symbol__ 'Triangle}))
 
-(def p (Point 1 2))
 
 ;;exercise 3
 (defn equal-tri?
