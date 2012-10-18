@@ -1,5 +1,4 @@
-(ns fp-oo.c3
-  (:use [clojure.core :exclude '[class]]))
+(ns fp-oo.c3)
 
 (def Point
   (fn [x y]
@@ -9,14 +8,13 @@
 
 (def y :y)
 
-(def class :__class_symbol__)
+(def class-of :__class_symbol__)
 
 (def shift
   (fn [this dx dy]
     (Point (+ (x this) dx)
            (+ (y this) dy))))
 
-;;exercise 1
 (def add
   (fn [p1 p2]
     (Point (+ (x p1) (x p2))
@@ -26,8 +24,7 @@
   (fn [p1 p2]
     (shift p1 (x p2) (y p2))))
 
-;;exercise 2
-(def a
+(def make
   (fn [cls & params]
     (apply cls params)))
 
@@ -35,16 +32,12 @@
   (fn [p1 p2 p3]
     {:p1 p1, :p2 p2 :p3 p3, :__class_symbol__ 'Triangle}))
 
-
-;;exercise 3
 (defn equal-tri?
   "Tests that triangles are equal. Note doesn't work for triangles with the same points but in a different order, but the exercise doesn't call for that."
   [triangle1 triangle2] (= triangle1 triangle2))
 
-;;exercise 4
 (defn equal-triangles? [& triangles] (apply = triangles))
 
-;;exercise 5
 (defn valid-triangle? [triangle]
   (= 3 (count (distinct [(:p1 triangle)
                         (:p2 triangle)
