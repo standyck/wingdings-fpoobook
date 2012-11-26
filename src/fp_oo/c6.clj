@@ -7,7 +7,11 @@
                    (recur (class-symbol-above sym)
                           (cons sym so-far))))))
 
-(def method-cache (fn [] ()))
+(def method-cache (fn [class]
+                    (let [class-symbol (:__own_symbol__ class)
+                          method-maps  (map class-instance-methods
+                                            (lineage class-symbol))]
+                      (apply merge method-maps))))
 
 (def apply-message-to (fn [class instance message args]
                         (let [method (message (method-cache class))]
@@ -25,22 +29,22 @@
                               (:__instance_methods__ (eval class-symbol))))
 
 (def Point
-  {:__own_symbol__       'Point
+  {:__own_symbol__        'Point
    :__superclass_symbol__ 'Anything
-   :__instance_methods__ {:add-instance-values (fn [this x y]
-                                                 (assoc this :x x :y y))
-                          :shift               (fn [this dx dy]
+   :__instance_methods__  {:add-instance-values (fn [this x y]
+                                                  (assoc this :x x :y y))
+                           :shift               ((fn [arg-list] ) [this dx dy]
                                                  (make Point
                                                        (+ (:x this) dx)
                                                        (+ (:y this) dy)))
-                          :add                 (fn [this that]
-                                                 (send-to this
-                                                          :shift
-                                                          (:x that)
-                                                          (:y that)))}})
+                           :add                 (fn [this that]
+                                                  (send-to this
+                                                           :shift
+                                                           (:x that)
+                                                           (:y that)))}})
 
 (def Anything
-  {:__own_symbol__ 'Anything
+  {:__own_symbol__       'Anything
    :__instance_methods__ {:add-instance-values identity
                           :class-name :__class_symbol__
                           :class      (fn [this] (eval (:__class_symbol__ this)))}})
