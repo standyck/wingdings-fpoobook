@@ -1,5 +1,11 @@
 (ns fp-oo.c6)
 
+(def class-symbol-above (fn [class-symbol]
+                          (:__superclass_symbol__ (eval class-symbol))))
+
+(def class-instance-methods (fn [class-symbol]
+                              (:__instance_methods__ (eval class-symbol))))
+
 (def lineage (fn [class-symbol]
                (loop [sym class-symbol so-far []]
                  (if (nil? sym)
@@ -33,15 +39,19 @@
    :__superclass_symbol__ 'Anything
    :__instance_methods__  {:add-instance-values (fn [this x y]
                                                   (assoc this :x x :y y))
-                           :shift               ((fn [arg-list] ) [this dx dy]
-                                                 (make Point
-                                                       (+ (:x this) dx)
-                                                       (+ (:y this) dy)))
+                           :shift               (fn [this dx dy]
+                                                  (make Point
+                                                        (+ (:x this) dx)
+                                                        (+ (:y this) dy)))
                            :add                 (fn [this that]
                                                   (send-to this
                                                            :shift
                                                            (:x that)
-                                                           (:y that)))}})
+                                                           (:y that)))
+                           :mirror              (fn [this]
+                                                  (make Point
+                                                        (:y this)
+                                                        (:x this)))}})
 
 (def Anything
   {:__own_symbol__       'Anything
@@ -49,6 +59,15 @@
                           :class-name :__class_symbol__
                           :class      (fn [this] (eval (:__class_symbol__ this)))}})
 
+
+;;It'd be nice to define a macro to create a class.
+;;We want something like this...
+(comment
+  (defclass Boom
+    :extends Point
+    :members [x y z]
+    :methods [(foo [arg1 arg2] (str arg1 ":" arg2))
+              (tostring [] (str "x=" ))]))
 
 ;;exercise 1
 (def factorial-1 (fn [n]
@@ -63,7 +82,7 @@
                      (if (<= something 1)               ;;ending case
                        so-far
                        (recur (dec something)           ;;smaller-structure-from
-                              (* something so-far)))))) ;;combiner
+                              (* something (bigint so-far))))))) ;;combiner
 
 ;;exercise 3
 (def add-sequence (fn [seq start-val]
@@ -87,10 +106,10 @@
 
 ;;exercise 5
 (def silly-map-combiner (fn [start-val kw]
-                          (assoc start-val k 0)))
+                          (assoc start-val kw 0)))
 
 (def position-combiner (fn [start-val kw]
-                         (assoc start-val k (count start-val))))
+                         (assoc start-val kw (count start-val))))
 
 (apply-to-sequence silly-map-combiner [:a :b :c] {})
 (apply-to-sequence position-combiner [:a :b :c] {})
