@@ -32,9 +32,6 @@
                (let [class (eval (:__class_symbol__ instance))]
                  (apply-message-to class instance message args))))
 
-(def class-instance-methods (fn [class-symbol]
-                              (:__instance_methods__ (eval class-symbol))))
-
 (def Point
   {:__own_symbol__        'Point
    :__superclass_symbol__ 'Anything
@@ -73,6 +70,13 @@
     :members [x y z]
     :methods [(foo [arg1 arg2] (str arg1 ":" arg2))
               (tostring [] (str "x=" ))]))
+
+(defmacro defclass [name  _ ex  _ members]
+  `(def ~name
+     {:__own-symbol__ (quote ~name)
+      :__superclass-symbol__ (quote ~ex)
+      :__instance-methods__
+      {:add-instance-values  ~@members}}))
 
 ;;exercise 1
 (def factorial-1 (fn [n]
