@@ -4,3 +4,7 @@ pom.xml
 /classes/
 .lein-deps-sum
 .emacs.desktop
+/.emacs.desktop.lock
+/.lein-failures
+/target/repl-port
+/target/stale/dependencies
