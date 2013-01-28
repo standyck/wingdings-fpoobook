@@ -41,17 +41,28 @@
   (apply + (map * (map inc (range)) coll)))
 
 ;;; exercise 8
-(defn isbn? [candidate-isbn]
-  (let [int-seq (map #(-> % str (Integer.)) (seq candidate-isbn))
+(defn isbn*? [candidate-isbn]
+  (let [int-seq (map #(-> % str (Integer.)) (seq (reverse candidate-isbn)))
         cs      (check-sum-isbn int-seq)]
-    (= 0 (rem cs 11))))
+    (zero? (rem cs 11))))
 
 ;;; exercise 9
 (defn one-or-three [n] (if (even? n) 1 3))
 (defn check-sum-upc [coll]
   {:pre [(every? integer? coll)]}
   (apply + (map * (map one-or-three (range)) coll)))
-(defn upc? [candidate-upc]
-  (let [int-seq (map #(-> % str (Integer.)) (seq candidate-upc))
+
+(defn upc*? [candidate-upc]
+  (let [int-seq (map #(-> % str (Integer.)) (seq (reverse candidate-upc)))
         cs      (check-sum-upc int-seq)]
-    (= 0 (rem cs 10))))
+    (zero? (rem cs 10))))
+
+;;; exercise 10
+(defn number-checker [multiple-seq div]
+  (fn [num]
+    (let [int-seq   (map #(-> % str (Integer.)) (seq (reverse num)))
+          check-sum (apply + (map * multiple-seq int-seq))]
+      (zero? (rem check-sum div)))))
+
+(def isbn? (number-checker (map inc (range)) 11))
+(def upc? (number-checker (map one-or-three (range)) 10))
