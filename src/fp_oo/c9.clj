@@ -47,10 +47,9 @@
     (zero? (rem cs 11))))
 
 ;;; exercise 9
-(defn one-or-three [n] (if (even? n) 1 3))
 (defn check-sum-upc [coll]
   {:pre [(every? integer? coll)]}
-  (apply + (map * (map one-or-three (range)) coll)))
+  (apply + (map * (cycle [1 3]) coll)))
 
 (defn upc*? [candidate-upc]
   (let [int-seq (map #(-> % str (Integer.)) (seq (reverse candidate-upc)))
@@ -65,4 +64,4 @@
       (zero? (rem check-sum div)))))
 
 (def isbn? (number-checker (map inc (range)) 11))
-(def upc? (number-checker (map one-or-three (range)) 10))
+(def upc? (number-checker (cycle [1 3]) 10))
