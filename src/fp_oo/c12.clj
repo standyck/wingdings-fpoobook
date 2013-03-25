@@ -52,7 +52,38 @@
       (catch Error e
         true))))
 
-(defn prompt-and-read []
-  (print "> ")
-  (.flush *out*)
-  (.readLine (java.io.BufferedReader. *in*)))
+(def prompt-and-read
+  (fn []
+    (print "> ")
+    (.flush *out*)
+    (.readLine
+     (new java.io.BufferedReader *in*))))
+
+;;; For exercise 3
+(def counted-sum
+  (fn [number-count numbers]
+    (apply +
+           (take number-count
+                 numbers))))
+
+(def number-string?
+  (fn [string]
+    (try
+      (Integer/parseInt string)
+      true
+      (catch NumberFormatException ignored
+        false))))
+
+(def to-integer
+  (fn [string]
+    (Integer/parseInt string)))
+
+(def ys-and-ns
+  (filter #(or (.startsWith % "y") (.startsWith % "n"))
+          (repeatedly prompt-and-read)))
+(defn counted-sum2 []
+  (let [nums (map to-integer
+                  (filter number-string? (repeatedly prompt-and-read)))
+        num-to-add (first nums)
+        num-list (take num-to-add (rest nums))]
+    (apply + num-list)))
