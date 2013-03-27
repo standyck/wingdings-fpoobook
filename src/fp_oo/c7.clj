@@ -77,7 +77,9 @@
            (select-keys course desired-keys))
          courses)))
 
-(defn half-day-solution [courses registrants-courses instructor-count]
+(defn half-day-solution
+  "doc string"
+  [courses, registrants-courses, instructor-count]
   (-> courses
       (annotate registrants-courses instructor-count)
       visible-courses
@@ -88,3 +90,9 @@
   (map (fn [courses]
          (half-day-solution courses registrants-courses instructor-count))
        (separate :morning? courses)))
+
+
+[{:course-name "zigging", :limit 4,  :registered 3}
+ {:course-name "zagging" :limit 1
+  :registered 1}]
+["zagging"]
